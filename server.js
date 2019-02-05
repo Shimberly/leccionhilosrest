@@ -94,7 +94,7 @@ app.put('/actualizarUsuario',(req,res)=>{
             return res.status(500).json({success: false, data: err});
         }
 
-        client.query("UPDATE usuario SET correo='"+req.body.correo+"', clave='"+req.body.clave+"', nombre='"+req.body.nombre+"',apellido='"+req.body.apellido+"',fecha_nacimiento='"+req.body.fecha_nacimiento+"', sexo='"+req.body.sexo+"' WHERE id='" + id + "';", function(err, result) {
+        client.query("UPDATE usuario SET usuario='"+req.body.usuario+"' WHERE id='" + id + "';", function(err, result) {
             
             if(err) {
                 return console.error('error running query', err);
@@ -143,7 +143,7 @@ app.post('/GuardarUsuario', (req, res) => {
         
         console.log("miau "+util.inspect(req,false,null));
         
-        client.query("INSERT INTO  usuario  (nombre,apellido,correo,clave,sexo,fecha_nacimiento) VALUES ('"+req.body.nombre+"', '"+req.body.apellido+"', '"+req.body.correo+"', '"+req.body.clave+"', '"+req.body.sexo+"', '"+req.body.fecha_nacimiento+"');", function(err, result) {
+        client.query("INSERT INTO  usuario  (usuario) VALUES ('"+req.body.usuario+"');", function(err, result) {
             if(err) {
                 return console.error('error running query', err);
             }
@@ -155,4 +155,28 @@ app.post('/GuardarUsuario', (req, res) => {
         });
         
     });
+});
+
+app.get('/ultimoidusuario',(req,res)=>{
+    var client = new pg.Client(conString);
+  
+    client.connect(function(err) {
+       if(err) {
+           return console.error('could not connect to postgres', err);
+           return res.status(500).json({success: false, data: err});
+       }
+
+       client.query('SELECT id from usuario order by id desc LIMIT 1', function(err, result) {
+           if(err) {
+               return console.error('error running query', err);
+           }
+          
+           //console.log(result);
+            client.end();
+           return res.json(result.rows);
+      
+       });
+      
+   });
+    
 });
