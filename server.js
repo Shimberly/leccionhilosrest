@@ -157,6 +157,30 @@ app.post('/GuardarUsuario', (req, res) => {
     });
 });
 
+app.post('/guardarRespuesta', (req, res) => {
+    var client = new pg.Client(conString);
+    client.connect(function(err) {
+        if(err) {
+            return console.error('could not connect to postgres', err);
+            return res.status(500).json({success: false, data: err});
+        }
+        
+        console.log("miau "+util.inspect(req,false,null));
+        
+        client.query("INSERT INTO  respuestas  (respuesta1,respuesta2,respuesta3) VALUES ('"+req.body.respuesta1+"','"+req.body.respuesta2+"','"+req.body.respuesta3+"');", function(err, result) {
+            if(err) {
+                return console.error('error running query', err);
+            }
+            
+            //console.log(result);
+            client.end();
+            return res.json(result.rows);
+            
+        });
+        
+    });
+});
+
 app.get('/ultimoidusuario',(req,res)=>{
     var client = new pg.Client(conString);
   

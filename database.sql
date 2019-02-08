@@ -1,12 +1,9 @@
 /* create database LOVEFOOD */
-CREATE TABLE usuario(
+CREATE TABLE intentos(
 	id serial NOT NULL,
-	nombre varchar(255),
-  apellido varchar(255),
-  correo varchar(255),
-  clave varchar(255),
-  sexo varchar(255),
-  fecha_nacimiento varchar(255),
+	respuesta1 varchar(255),
+  respuesta2 varchar(255),
+  respuesta3 varchar(255),
    	PRIMARY KEY (id)
 );
 /*
